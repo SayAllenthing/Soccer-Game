@@ -9,32 +9,30 @@ public class GameUIManager :  NetworkBehaviour
     public Text Score;
     public Text Goal;
 
+    void Start()
+    {
+        GetComponent<RectTransform>().anchoredPosition = new Vector3(7, -7, 0);
+    }
+
     [ClientRpc]
     public void RpcSetScore(int left, int right)
     {
-        Score.text = left + " - " + right;
+
+        Score.text = "Home " + left + " - " + right + " Away";
     }
 
     public void SetScore(int left, int right)
     {
+
+        //Debug.Log(GetComponent<RectTransform>().anchoredPosition 
+
         RpcSetScore(left, right);
     }
 
     [ClientRpc]
     public void RpcShowGoal(bool show)
     {
-        Goal.gameObject.SetActive(show);
+        if(Goal)
+            Goal.gameObject.SetActive(show);
     }
-
-	// Use this for initialization
-	void Start () 
-    {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () 
-    {
-	
-	}
 }

@@ -319,6 +319,7 @@ MonoBehaviour:
   lobbySlots: []
   MenuPanel: {fileID: 567298353}
   PlayerPanel: {fileID: 1699395288}
+  GameUIPanel: {fileID: 0}
   TopText: {fileID: 176631163}
   PlayerPanelBackButton: {fileID: 1652427804}
   HomePlayerListTransform: {fileID: 1899352070}

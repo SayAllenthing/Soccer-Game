@@ -10,6 +10,11 @@ public class PlayerSync : ActorSync
 
     public string LobbyTeam = "Home";
 
+   
+    bool PingLock = false;
+    float TimeStamp = 0;
+    int PingCounter = 0;
+
     void Start()
     {
         if (!isLocalPlayer)
@@ -44,8 +49,10 @@ public class PlayerSync : ActorSync
         base.Update();
 
         if (isLocalPlayer)
+        {
             HandleInput();
-      
+            HandlePing();
+        }
 	}
 
     public void SetLobbyPlayer(LobbyPlayer lp)
@@ -80,5 +87,56 @@ public class PlayerSync : ActorSync
         CmdUpdateAvatar(PO.HairColor, PO.HairStyle, PO.BrowStyle, PO.SkinColor);
 
         SendAvatar(PO.HairColor, PO.HairStyle, PO.BrowStyle, PO.SkinColor);
+    }
+
+    //Ping===========================================================================================
+    [Command]
+    void CmdSendPing()
+    {
+        if (isLocalPlayer)
+            GetPing();
+        else
+            RpcGetPing();
+    }
+
+    [ClientRpc]
+    void RpcGetPing()
+    {
+        if (isLocalPlayer)
+            GetPing();
+    }
+
+    void GetPing()
+    {
+        if (isLocalPlayer)
+        {
+            float ping = TimeStamp*1000f;
+            DebugManager.Instance.SetPing(ping);
+            //Debug.Log("Ping Time = " + ping.ToString("0.0") + "ms");
+            PingLock = false;
+            TimeStamp = 0;
+        }
+    }
+
+    void HandlePing()
+    {
+        if (!PingLock)
+        {
+            if(PingCounter > 500)
+            {
+                PingLock = true;
+                TimeStamp += Time.deltaTime;
+                CmdSendPing();
+                PingCounter = 0;
+            }
+            else
+            {
+                PingCounter++;
+            }           
+        } 
+        else
+        {
+           TimeStamp += Time.deltaTime;
+        }
     }
 }

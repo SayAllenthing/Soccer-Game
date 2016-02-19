@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Player : Actor
 {
-    public Camera camera;
+    public PlayerCamera camera;
 
 	// Use this for initialization
 	void Start () 
@@ -15,7 +15,12 @@ public class Player : Actor
     public void Init()
     {
         transform.eulerAngles = new Vector3(45, 0, 0);
-        camera.enabled = true;
+        camera.Init(this.transform);
+    }
+
+    public override void OnGameReset()
+    {
+        camera.SetBall(GameObject.Find("Ball").transform);       
     }
 
 	// Update is called once per frame

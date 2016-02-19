@@ -22,13 +22,13 @@ public class ActorSync : NetworkBehaviour {
     protected bool AvatarSent = false;
 
     [SyncVar]
-    int SyncHairColour = -1;
+    public int SyncHairColour = -1;
     [SyncVar]
-    int SyncHair = -1;
+    public int SyncHair = -1;
     [SyncVar]
-    int SyncBrow = -1;
+    public int SyncBrow = -1;
     [SyncVar]
-    int SyncSkin = -1;
+    public int SyncSkin = -1;
 
     //Player State Variables
     public Vector2 WantDir;
@@ -196,8 +196,17 @@ public class ActorSync : NetworkBehaviour {
             }
             else if(Shooting)
             {
-                theBall.Shoot(WantDir.normalized, SyncVel, transform.localScale.x);
-                RpcSetAnimTrigger("Shooting");
+                if(theBall.transform.position.y > 3.5f)
+                {
+                    RpcSetAnimTrigger("Heading");
+                    theBall.Head(WantDir.normalized, SyncVel, transform.localScale.x);
+                }
+                else
+                {
+                    RpcSetAnimTrigger("Shooting");
+                    theBall.Shoot(WantDir.normalized, SyncVel, transform.localScale.x);
+                }
+
                 KickLock = Time.time + 0.8f;
                 return;
             }
@@ -272,12 +281,15 @@ public class ActorSync : NetworkBehaviour {
     [ClientRpc]
     protected void RpcSetAvatar(int colour, int hair, int brow, int skin)
     {
-        avatar.ChangeHairColour(SyncHairColour);
-        avatar.ChangeHair(SyncHair);
-        avatar.ChangeBrow(SyncBrow);
-        avatar.ChangeSkin(SyncSkin);
+        if (avatarReady())
+        {
+            avatar.ChangeHairColour(SyncHairColour);
+            avatar.ChangeHair(SyncHair);
+            avatar.ChangeBrow(SyncBrow);
+            avatar.ChangeSkin(SyncSkin);
 
-        AvatarSent = true;
+            AvatarSent = true;
+        }
     }
     
     protected void SetAvatar()
@@ -304,7 +316,10 @@ public class ActorSync : NetworkBehaviour {
     bool avatarReady()
     {
         if (SyncHair < 0 || SyncHair > avatar.HairOptions.Count)
+        {
+            Debug.Log("ERROR! SyncHair is fucked: " + SyncHair);
             return false;
+        }
 
         if (SyncHairColour < 0 || SyncHairColour > avatar.HairColours.Count)
             return false;

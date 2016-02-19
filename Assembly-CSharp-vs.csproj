@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{0234739E-46F0-BC40-E736-2B55143FFF1E}</ProjectGuid>
+	<ProjectGuid>{711262E9-5710-50ED-5FF4-9F4304C18EAE}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\BallRenderer.cs" />
      <Compile Include="Assets\Scripts\BallSync.cs" />
      <Compile Include="Assets\Scripts\Managers\AvatarCreation.cs" />
+     <Compile Include="Assets\Scripts\Managers\DebugManager.cs" />
      <Compile Include="Assets\Scripts\Managers\Game.cs" />
      <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
      <Compile Include="Assets\Scripts\Managers\GameUIManager.cs" />
@@ -66,6 +67,7 @@
      <Compile Include="Assets\Scripts\Player\Legacy\TestPlayer.cs" />
      <Compile Include="Assets\Scripts\Player\LobbyPlayer.cs" />
      <Compile Include="Assets\Scripts\Player\Player.cs" />
+     <Compile Include="Assets\Scripts\Player\PlayerCamera.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerSync.cs" />
      <Compile Include="Assets\Scripts\Player\Team.cs" />
      <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonBasic.shader" />
@@ -87,7 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
-      <Project>{A8C7100D-7C17-BC76-53CF-74BC068D1C0F}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
+      <Project>{4391268C-F4D4-A2C6-AE73-1A9D9D243EE3}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

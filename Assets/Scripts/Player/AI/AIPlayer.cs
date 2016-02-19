@@ -110,7 +110,7 @@ public class AIPlayer : Actor
     void GetPositions()
     {
         //Find where the ball is discluding how high it is.
-        Vector3 ballPos = ball.transform.position;
+        ballPos = ball.transform.position;
         ballPos.y = 0;
 
         ballToMe = ballPos - transform.position;
@@ -139,7 +139,10 @@ public class AIPlayer : Actor
         if (ball == null)
             return;
 
-
+        if (!IsBehindBall(10, false))
+            GetInDefensivePosition();
+        else if(IsBallInMyHalf())
+            GetInClearingPosition();
     }
 
     void GoToPosition(Vector3 pos)
@@ -197,7 +200,19 @@ public class AIPlayer : Actor
     //Helper functions
     bool IsBehindBall(float padding, bool considerNetPosition = true)
     {
+        float DisX = (ballToMe.x * myNetDir) + padding;
+
+        if (!considerNetPosition)
+        {
+            return (ballToMe.x * myNetDir) + padding < 0;
+        }
+
         return false;
+    }
+
+    bool IsBallInMyHalf()
+    {
+        return ballPos.x * myNetDir > 0;
     }
 
     Vector3 GetRealisticPosition(Vector3 pos)
@@ -228,14 +243,33 @@ public class AIPlayer : Actor
             network.ChangeDirection(1);
     }
 
+    void GetBehindBall()
+    {
+        Vector3 pos = myNet + ballToMyNet/1.2f;
+        GoToPosition(pos);
+    }
+
     void GetInDefensivePosition()
     {        
+        Debug.Log("Am I behind the ball? " + IsBehindBall(2, false));
+
+        network.Shooting = false;
+
+        GetBehindBall();
 
     }
 
     void GetInClearingPosition()
     {
+        Vector3 pos = myNet + ballToMyNet/2f;
+        GoToPosition(pos);
 
+        /*
+        Vector3 pos = ballPos;
+        WantPosition = GetRealisticPosition(pos);
+
+        network.Shooting = true;
+        */
     }
 }
 

@@ -76,7 +76,7 @@ public class GameManager : NetworkBehaviour {
     void OnStartGame()
     {
         game = GameObject.Find("Game").GetComponent<Game>();
-        UI = GameObject.Find("UIManager").GetComponent<GameUIManager>();
+        UI = GameObject.Find("GameUIPanel").GetComponent<GameUIManager>();
         SetScore();
         
         SpawnBall();
@@ -132,10 +132,10 @@ public class GameManager : NetworkBehaviour {
         } 
         else if (a.tag == "AI")
         {
-            bool homeTeam = false;
+            bool homeTeam = true;
 
-            a.Team = "Away";
-            Away.AddPlayer(a);
+            a.Team = "Home";
+            Home.AddPlayer(a);
 
             float x = homeTeam ? -20 : 20;
             a.transform.position = new Vector3(x, a.transform.position.y, Random.Range(-15, 15)); 

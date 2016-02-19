@@ -8,6 +8,7 @@ TagManager:
   - Net
   - Keeper
   - AI
+  - Goal
   layers:
   - Default
   - TransparentFX
@@ -48,11 +49,14 @@ TagManager:
   - name: Background
     uniqueID: 1093696345
     locked: 0
+  - name: Characters
+    uniqueID: 3940858523
+    locked: 0
   - name: Foreground
     uniqueID: 1859086223
     locked: 0
-  - name: Characters
-    uniqueID: 3940858523
+  - name: Front
+    uniqueID: 3052522275
     locked: 0
   - name: UI
     uniqueID: 771169021
