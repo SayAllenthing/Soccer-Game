@@ -9,7 +9,7 @@ public class Ball : MonoBehaviour {
 
     public bool bInPlay = false;
 
-    float MaxPower = 45;
+    float MaxPower = 50;
 
 	// Use this for initialization
 	void Start () 
@@ -47,14 +47,16 @@ public class Ball : MonoBehaviour {
             dir = new Vector3(x, 0, rigidbody.velocity.z/10);
         }
 
-        dir *= 10;
+		dir *= Random.Range(8f, 10f);
 
-        dir.y = Random.Range(5, 30);
+        dir.y = Random.Range(5, 25);
 
         if (dir.magnitude > MaxPower)
             dir = ClampPower(dir);
 
-        rigidbody.AddForce(dir);
+		DebugManager.Instance.OnShot(force.magnitude, dir, rigidbody.velocity);
+
+		rigidbody.AddForce(dir);
     }
 
     public void Head(Vector2 direction, Vector3 force, float deadDir)
@@ -80,9 +82,34 @@ public class Ball : MonoBehaviour {
         
         if (dir.magnitude > MaxPower)
             dir = ClampPower(dir);
+
+		DebugManager.Instance.OnShot(force.magnitude, dir, rigidbody.velocity);
         
         rigidbody.AddForce(dir);
     }
+
+	public void Cross(float dis)
+	{
+		float min = 25;
+
+		Vector3 dir = new Vector3(-rigidbody.velocity.x, Mathf.Abs(dis)/1.8f, dis + 5);
+
+		if(Mathf.Abs(dis) < min)
+		{			
+			dir.z = dis < 0? -min : min;
+		}
+
+		dir.y = Mathf.Clamp(dir.y, 12f,16f);
+
+		dir *= 1.5f;
+
+		dir.y *= Random.Range(0.9f, 1.1f);
+		dir.z *= Random.Range(0.9f, 1.1f);
+
+		Debug.Log(dir);
+
+		rigidbody.AddForce(dir);
+	}
 
     Vector3 ClampPower(Vector3 dir)
     {

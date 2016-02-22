@@ -5,12 +5,15 @@ using UnityEngine.Networking;
 using System.Collections.Generic;
 
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameLobbyManager : NetworkLobbyManager 
 {
     public GameObject MenuPanel;
     public GameObject PlayerPanel;
     public GameObject TopText;
+
+	public InputField IPField;
 
     public Button PlayerPanelBackButton;
 
@@ -92,10 +95,47 @@ public class GameLobbyManager : NetworkLobbyManager
         }
     }
 
+	public override void OnLobbyClientSceneChanged(NetworkConnection conn)
+	{
+		base.OnLobbyClientSceneChanged(conn);
+
+		MenuPanel.SetActive(false);
+		PlayerPanel.SetActive(false);
+		TopText.SetActive(false);
+	}
+
     public void OnMainMenuBackPressed()
     {
-        Application.LoadLevel("MainMenu");
+		SceneManager.LoadScene("MainMenu");
+
     }
+
+	public override void OnLobbyServerPlayersReady()
+	{
+		Debug.Log("All players are ready");
+
+		bool ready = true;
+		foreach (LobbyPlayer p in lobbySlots)
+		{
+			if(!p)
+			{				
+				continue;
+			}
+
+			if(!p.readyToBegin)
+				ready = false;			
+		}
+
+		if(ready)
+		{
+			ServerChangeScene(playScene);
+		}
+	}
+
+	//public override void ServerChangeScene(string scene)
+	//{		
+	//	SceneManager.LoadScene(scene);
+	//}
 
     public void OnHostBackPressed()
     {
@@ -117,7 +157,10 @@ public class GameLobbyManager : NetworkLobbyManager
 
     void SetIPAddress()
     {
-        string ip = "10.138.8.64";
+        //string ip = "10.138.8.64";
+		string ip = IPField.text;
+		if(ip == "")
+			ip = "localhost";
         NetworkManager.singleton.networkAddress = ip;
     }
 
@@ -131,11 +174,11 @@ public class GameLobbyManager : NetworkLobbyManager
         //if(HomePlayerListTransform.childCount > AwayPlayerListTransform.childCount)
           //  player.transform.SetParent(AwayPlayerListTransform, false);
         //else
-            player.transform.SetParent(HomePlayerListTransform, false);
+		player.UI.SetParent(HomePlayerListTransform, false);
     }
 
     public void SetTeam(Transform t, string team)
-    {
+    {		
         if(team == "Home")
             t.SetParent(HomePlayerListTransform, false);
         else
@@ -155,6 +198,8 @@ public class GameLobbyManager : NetworkLobbyManager
 
     public override GameObject OnLobbyServerCreateGamePlayer(NetworkConnection conn, short playerControllerId)
     {
+        Debug.Log("Are we creating a player?");
+
         GameObject player = base.OnLobbyServerCreateGamePlayer(conn, playerControllerId) as GameObject;
 
         return player; 

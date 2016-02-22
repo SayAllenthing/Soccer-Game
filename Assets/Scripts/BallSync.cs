@@ -27,6 +27,16 @@ public class BallSync : NetworkBehaviour
     public void Start()
     {
         ball = GetComponent<Ball>();
+
+		if(!NetworkServer.active)
+			Destroy(this.GetComponent<Rigidbody>());
+
+		Actor[] gos = (Actor[])GameObject.FindObjectsOfType(typeof(Actor));
+		foreach (Actor go in gos) 
+		{			
+			go.gameObject.BroadcastMessage("OnBallSpawned", this.gameObject, SendMessageOptions.DontRequireReceiver);
+		}
+
     }
 
     public override void PreStartClient()

@@ -76,7 +76,7 @@ public class GameManager : NetworkBehaviour {
     void OnStartGame()
     {
         game = GameObject.Find("Game").GetComponent<Game>();
-        UI = GameObject.Find("GameUIPanel").GetComponent<GameUIManager>();
+        UI = GameObject.Find("UICanvas").GetComponent<GameUIManager>();
         SetScore();
         
         SpawnBall();
@@ -181,7 +181,7 @@ public class GameManager : NetworkBehaviour {
     public void Reset()
     {
         if (ball)
-            DestroyImmediate(ball);
+			Destroy(ball);
 
         SpawnBall();
         UI.RpcShowGoal(false);

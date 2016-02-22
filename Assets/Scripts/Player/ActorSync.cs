@@ -34,6 +34,7 @@ public class ActorSync : NetworkBehaviour {
     public Vector2 WantDir;
     public bool Shooting;
     public bool Sprinting;
+	public bool Crossing;
 
     protected Actor player;
 
@@ -210,6 +211,19 @@ public class ActorSync : NetworkBehaviour {
                 KickLock = Time.time + 0.8f;
                 return;
             }
+			else if(Crossing)
+			{
+				if(theBall.transform.position.y > 3.5f)
+				{
+					RpcSetAnimTrigger("Heading");
+				}
+				else
+				{
+					RpcSetAnimTrigger("Shooting");
+				}
+
+				theBall.Cross(-transform.position.z);
+			}
             else
             {
                 theBall.Dribble(SyncVel);

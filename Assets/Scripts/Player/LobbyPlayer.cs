@@ -13,6 +13,7 @@ public class LobbyPlayer : NetworkLobbyPlayer
     [SyncVar(hook = "OnSetTeam")]
     public string MyTeam = "Home";
 
+	public Transform UI;
 
     public Text NameDisplay;
 
@@ -20,6 +21,11 @@ public class LobbyPlayer : NetworkLobbyPlayer
     public Button ChangeTeamButton;
 
     public Image BGColor;
+
+	void Awake()
+	{
+		DontDestroyOnLoad(transform.gameObject);
+	}
 
     public override void OnStartClient()
     {
@@ -81,17 +87,34 @@ public class LobbyPlayer : NetworkLobbyPlayer
         ChangeTeamButton = GameObject.Find("ChangeTeamButton").GetComponent<Button>();
         ChangeTeamButton.onClick.RemoveAllListeners();
         ChangeTeamButton.onClick.AddListener(OnTeamChanged);
+
+		Debug.Log("Am I ready? " + readyToBegin);
+		SendNotReadyToBeginMessage();
+		Debug.Log("Am I ready? " + readyToBegin);
     }
+
+	public override void OnClientReady(bool readyState)
+	{
+		Debug.Log("Am I ready State? " + readyState);
+	}
 
     void SetupOtherPlayer()
     {
-
+		
     }
 
     public void OnReadyClicked()
     {
-        SendReadyToBeginMessage();
-        CmdReadyChanged(Color.green);
+		if(!readyToBegin)
+		{
+			SendReadyToBeginMessage();
+        	CmdReadyChanged(Color.green);
+		}
+		else
+		{
+			SendNotReadyToBeginMessage();
+			CmdReadyChanged(Color.red);
+		}
     }
 
     //SyncVar Callbacks
@@ -129,8 +152,13 @@ public class LobbyPlayer : NetworkLobbyPlayer
     public void OnSetTeam(string team)
     {
         MyTeam = team;
-        GameLobbyManager.instance.SetTeam(this.transform, team);
+        GameLobbyManager.instance.SetTeam(UI, team);
     }
+
+	//public void OnLevelWasLoaded(int level)
+	//{
+	//	Debug.Log("Butts");
+	//}
 
     //Server Catch
     [Command]

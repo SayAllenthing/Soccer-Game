@@ -8,6 +8,7 @@ public class DebugManager : MonoBehaviour {
 
     public CanvasGroup DebugPanel;
     public Text GameSpeedText;
+	public Text ShotText;
 
     float ping = 0;
 
@@ -64,4 +65,12 @@ public class DebugManager : MonoBehaviour {
     {
         ping = p;
     }
+
+	public void OnShot(float power, Vector3 direction, Vector3 BallVel)
+	{
+		float height = direction.y;
+		direction.y = 0;
+
+		ShotText.text = "Last Shot:\n   Direction: " + direction + "\nBall Vel: " + BallVel + "\n   Power: " + power.ToString("0") + ", Height: " + height.ToString("0.0");
+	}
 }

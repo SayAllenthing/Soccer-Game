@@ -63,11 +63,12 @@ public class PlayerSync : ActorSync
 
     //Client to Server functions====================================================================
     [Command]
-    void CmdSendInput(Vector2 wantDir, bool wantShoot, bool wantSprint)
+	void CmdSendInput(Vector2 wantDir, bool wantShoot, bool wantSprint, bool wantCross)
     {
         WantDir = wantDir.normalized;
         Shooting = wantShoot;
         Sprinting = wantSprint;
+		Crossing = wantCross;
     }
 
     [ClientCallback]
@@ -76,7 +77,8 @@ public class PlayerSync : ActorSync
         Vector2 wantDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         bool wantShoot = Input.GetButton("Shoot");
         bool wantSprint = Input.GetButton("Sprint");
-        CmdSendInput(wantDir, wantShoot, wantSprint);
+		bool wantCross = Input.GetButton("Cross");
+        CmdSendInput(wantDir, wantShoot, wantSprint, wantCross);
     }
     //==============================================================================================
 
@@ -139,4 +141,10 @@ public class PlayerSync : ActorSync
            TimeStamp += Time.deltaTime;
         }
     }
+
+	//Debug===========================================
+	public void OnDebugShot()
+	{
+
+	}
 }

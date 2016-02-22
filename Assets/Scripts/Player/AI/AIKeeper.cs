@@ -45,6 +45,12 @@ public class AIKeeper : Actor
         bIsInitialized = true;
     }
 
+	public void OnBallSpawned(GameObject b)
+	{
+		if(b)			
+			ball = b;
+	}
+
     public void SetupAI(Game g)
     {
         //Send Avatar again, as it's likely some players connecting later don't have it.
@@ -53,7 +59,7 @@ public class AIKeeper : Actor
 
     public override void OnGameReset()
     {
-        ball = GameObject.Find("Ball") as GameObject;
+        
     }
 	
 	// Update is called once per frame

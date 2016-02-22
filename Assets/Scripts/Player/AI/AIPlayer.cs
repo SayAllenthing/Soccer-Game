@@ -68,8 +68,14 @@ public class AIPlayer : Actor
 
     public override void OnGameReset()
     {
-        ball = GameObject.Find("Ball") as GameObject;       
+          
     }
+
+	public void OnBallSpawned(GameObject b)
+	{
+		if(b)			
+			ball = b;
+	}
 
     public void SetupAI(Game g)
     {
@@ -109,6 +115,12 @@ public class AIPlayer : Actor
 
     void GetPositions()
     {
+		if(!ball)
+		{
+			ball = GameObject.Find("Ball") as GameObject;    
+			return;
+		}
+
         //Find where the ball is discluding how high it is.
         ballPos = ball.transform.position;
         ballPos.y = 0;
