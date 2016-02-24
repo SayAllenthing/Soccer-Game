@@ -36,6 +36,11 @@ public class ActorSync : NetworkBehaviour {
     public bool Sprinting;
 	public bool Crossing;
 
+	Vector2 PrevWantDir = Vector2.zero;
+	float CurrentSpeed = 0;
+	float Acceleration = 5;
+	float SlideEnergy = 0;
+
     protected Actor player;
 
     float KickLock = -1;
@@ -104,7 +109,10 @@ public class ActorSync : NetworkBehaviour {
         //Only lerp other characters
         if (!NetworkServer.active)
         {
-            myTransform.position = Vector3.Lerp(myTransform.position, SyncPos, Time.deltaTime * lerpRate);
+			//Client prediction
+			Vector3 prediction = SyncVel / 10;
+
+            myTransform.position = Vector3.Lerp(myTransform.position, SyncPos + prediction, Time.deltaTime * lerpRate);
 
             if(player.bAllowTurn)
                 ChangeDirection(SyncDir);
@@ -136,14 +144,32 @@ public class ActorSync : NetworkBehaviour {
     void SendPosition()
     {
         float wantSpeed = player.GetSpeed(Sprinting);
+
+		CurrentSpeed = Mathf.Lerp (CurrentSpeed, wantSpeed, 4f * Time.deltaTime);
         
-        SyncVel = new Vector3(WantDir.x, 0, WantDir.y) * wantSpeed;
+        SyncVel = new Vector3(WantDir.x, 0, WantDir.y) * CurrentSpeed;
         
-        myRigidbody.velocity = SyncVel;
+		if (SlideEnergy > 0) 
+		{
+			SlideEnergy -= 0.15f;
+			SyncVel *= (SlideEnergy / 10);
+			Debug.Log ("Slide Engery " + SlideEnergy);
+		}
+
+		myRigidbody.velocity = SyncVel;
 
         if(player.bAllowTurn)
             ChangeDirection(WantDir.x);
         UpdatePosition(myTransform.position, myTransform.localScale.x);
+
+		float dot = Vector2.Dot (PrevWantDir, WantDir);
+
+		if (dot <= 0.5f)
+			CurrentSpeed = -2;
+		else if (dot <= 0.75f)
+			CurrentSpeed = 4;
+
+		PrevWantDir = WantDir;
     }
     //==============================================================================================
 
@@ -193,7 +219,7 @@ public class ActorSync : NetworkBehaviour {
             
             if(player.GetCurrentAnimationName() == "Sliding")
             {
-                theBall.Slide(SyncVel);
+                theBall.Slide(SyncVel * 0.9f);
             }
             else if(Shooting)
             {
@@ -264,11 +290,23 @@ public class ActorSync : NetworkBehaviour {
         KickLock = Time.time + 0.2f;
     }
 
+	//Events
+	public void OnSlide()
+	{
+		if (player.GetCurrentAnimationName () != "Sliding") 
+		{
+			SlideEnergy = 15;
+		}
+	}
+
     [Command]
     public void CmdAction(string action)
     {
         if(player.GetCurrentAnimationName() != action)
             RpcSetAnimTrigger(action);
+
+		if (action == "Sliding")
+			OnSlide();
     }
 
     [Command]
