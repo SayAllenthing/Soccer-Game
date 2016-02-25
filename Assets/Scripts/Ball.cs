@@ -28,6 +28,8 @@ public class Ball : MonoBehaviour {
     public void Dribble(Vector3 direction)
     {
         rigidbody.AddForce(direction * 0.5f);
+
+		GameSoundManager.Instance.PlaySound("Kick");
     }
 
     public void Shoot(Vector2 direction, Vector3 force, float deadDir)
@@ -49,7 +51,7 @@ public class Ball : MonoBehaviour {
 
 		dir *= Random.Range(8f, 10f);
 
-        dir.y = Random.Range(5, 25);
+        dir.y = Random.Range(5f, 30f);
 
         if (dir.magnitude > MaxPower)
             dir = ClampPower(dir);
@@ -57,6 +59,8 @@ public class Ball : MonoBehaviour {
 		DebugManager.Instance.OnShot(force.magnitude, dir, rigidbody.velocity);
 
 		rigidbody.AddForce(dir);
+
+		GameSoundManager.Instance.PlaySound("Kick");
     }
 
     public void Head(Vector2 direction, Vector3 force, float deadDir)
@@ -78,7 +82,7 @@ public class Ball : MonoBehaviour {
         
         dir *= 6;
         
-        dir.y = Random.Range(-20, 30);
+        dir.y = Random.Range(-20f, 25f);
         
         if (dir.magnitude > MaxPower)
             dir = ClampPower(dir);
@@ -86,6 +90,8 @@ public class Ball : MonoBehaviour {
 		DebugManager.Instance.OnShot(force.magnitude, dir, rigidbody.velocity);
         
         rigidbody.AddForce(dir);
+
+		GameSoundManager.Instance.PlaySound("Kick");
     }
 
 	public void Cross(float dis)
@@ -109,6 +115,8 @@ public class Ball : MonoBehaviour {
 		Debug.Log(dir);
 
 		rigidbody.AddForce(dir);
+
+		GameSoundManager.Instance.PlaySound("Kick");
 	}
 
     Vector3 ClampPower(Vector3 dir)

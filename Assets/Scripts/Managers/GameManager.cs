@@ -190,6 +190,8 @@ public class GameManager : NetworkBehaviour {
         {
             actors[i].OnGameReset();
         }
+
+		GameSoundManager.Instance.PlaySound("Crowd");
     }
 
     public void OnGoal(string net)
@@ -197,13 +199,16 @@ public class GameManager : NetworkBehaviour {
         if (ResetTime > 0)
             return;
 
+		GameSoundManager.Instance.PlaySound("CrowdGoal");
+		GameSoundManager.Instance.PlaySound("GoalMusic");
+
         game.OnGoal(net);
 
         UI.RpcShowGoal(true);
 
         SetScore();
 
-        ResetTime = Time.time + 3;        
+        ResetTime = Time.time + 14;        
     }
 
     void SetScore()

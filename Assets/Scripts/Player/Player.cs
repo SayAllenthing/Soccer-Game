@@ -25,7 +25,6 @@ public class Player : Actor
 
 	public void OnBallSpawned(GameObject b)
 	{
-		Debug.Log("This is your damned ball " + b);
 		camera.SetBall(b.transform);
 	}
 

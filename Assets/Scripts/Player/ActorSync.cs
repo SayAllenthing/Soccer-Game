@@ -153,7 +153,6 @@ public class ActorSync : NetworkBehaviour {
 		{
 			SlideEnergy -= 0.15f;
 			SyncVel *= (SlideEnergy / 10);
-			Debug.Log ("Slide Engery " + SlideEnergy);
 		}
 
 		myRigidbody.velocity = SyncVel;

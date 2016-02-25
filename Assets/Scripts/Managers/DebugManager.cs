@@ -28,7 +28,7 @@ public class DebugManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        if (Input.GetKeyDown(KeyCode.BackQuote))
+		if (Input.GetKeyDown(KeyCode.P))
         {
             DebugPanel.alpha = DebugPanel.alpha == 1 ? 0 : 1;
         }
