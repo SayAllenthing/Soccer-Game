@@ -63,12 +63,26 @@ public class PlayerSync : ActorSync
 
     //Client to Server functions====================================================================
     [Command]
-	void CmdSendInput(Vector2 wantDir, bool wantShoot, bool wantSprint, bool wantCross)
+	void CmdSendInput(Vector2 wantDir, bool wantShoot, bool wantSprint, bool wantCross, bool wantDummy)
     {
         WantDir = wantDir.normalized;
         Shooting = wantShoot;
         Sprinting = wantSprint;
 		Crossing = wantCross;
+
+		if (!Dummy && wantDummy) 
+		{
+			SetLayerRecursively (player.ColiderAnim.gameObject, 8);
+			Debug.Log ("Dummying");
+		}
+
+		if(Dummy && !wantDummy)
+		{
+			SetLayerRecursively (player.ColiderAnim.gameObject, 0);
+			Debug.Log ("Dummying off");
+		}
+
+		Dummy = wantDummy;
     }
 
     [ClientCallback]
@@ -78,8 +92,21 @@ public class PlayerSync : ActorSync
         bool wantShoot = Input.GetButton("Shoot");
         bool wantSprint = Input.GetButton("Sprint");
 		bool wantCross = Input.GetButton("Cross");
-        CmdSendInput(wantDir, wantShoot, wantSprint, wantCross);
+
+		bool wantDummy = Input.GetButton("Dummy");
+
+        CmdSendInput(wantDir, wantShoot, wantSprint, wantCross, wantDummy);
     }
+
+	void SetLayerRecursively(GameObject obj , int newLayer)
+	{
+		obj.layer = newLayer;
+
+		foreach(Transform child in obj.transform)
+		{
+			SetLayerRecursively( child.gameObject, newLayer );
+		}
+	}
     //==============================================================================================
 
     [ClientCallback]

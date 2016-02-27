@@ -36,10 +36,23 @@ public class Ball : MonoBehaviour {
     {
         Vector3 dir = new Vector3(direction.x, 0, direction.y);
 
-        dir += force/5;
+        dir += force;
+		dir = dir.normalized;
 
-        dir *= Random.Range(0.8f, 1.5f);
+		if (dir.magnitude < 1) 
+		{			
+			dir = new Vector3(deadDir, 0, rigidbody.velocity.normalized.z/2);
+		}
 
+		float Power = Mathf.Clamp(force.magnitude, 12, 15);
+		Power *= Random.Range (2.8f, 3.2f);
+
+		dir *= Power;
+
+
+        //dir *= Random.Range(0.8f, 1.5f);
+
+		/*
         if (dir.magnitude < 1)
         {
             float x = (deadDir + rigidbody.velocity.x) * 1.8f;
@@ -48,15 +61,14 @@ public class Ball : MonoBehaviour {
 
             dir = new Vector3(x, 0, rigidbody.velocity.z/10);
         }
-
-		dir *= Random.Range(8f, 10f);
+        */
 
         dir.y = Random.Range(5f, 30f);
 
-        if (dir.magnitude > MaxPower)
-            dir = ClampPower(dir);
+        //if (dir.magnitude > MaxPower)
+            //dir = ClampPower(dir);
 
-		DebugManager.Instance.OnShot(force.magnitude, dir, rigidbody.velocity);
+		DebugManager.Instance.OnShot(Power, dir, rigidbody.velocity);
 
 		rigidbody.AddForce(dir);
 

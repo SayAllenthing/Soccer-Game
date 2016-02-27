@@ -35,6 +35,7 @@ public class ActorSync : NetworkBehaviour {
     public bool Shooting;
     public bool Sprinting;
 	public bool Crossing;
+	public bool Dummy;
 
 	Vector2 PrevWantDir = Vector2.zero;
 	float CurrentSpeed = 0;

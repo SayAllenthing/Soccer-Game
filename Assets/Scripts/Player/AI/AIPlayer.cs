@@ -263,7 +263,7 @@ public class AIPlayer : Actor
 
     void GetInDefensivePosition()
     {        
-        Debug.Log("Am I behind the ball? " + IsBehindBall(2, false));
+        //Debug.Log("Am I behind the ball? " + IsBehindBall(2, false));
 
         network.Shooting = false;
 
