@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Ball : MonoBehaviour {
 
@@ -10,6 +11,8 @@ public class Ball : MonoBehaviour {
     public bool bInPlay = false;
 
     float MaxPower = 50;
+
+	public List<ActorSync> ActorTouches = new List<ActorSync>();
 
 	// Use this for initialization
 	void Start () 
@@ -140,4 +143,25 @@ public class Ball : MonoBehaviour {
     {
         rigidbody.AddForce(direction * 2);
     }
+
+	public void AddTouch(ActorSync a)
+	{
+		if (a.tag == "Keeper")
+			return;
+
+		ActorTouches.Add (a);
+
+		if (ActorTouches.Count > 5)  
+		{
+			ActorTouches.Remove (ActorTouches [0]);
+		}
+	}
+
+	public string GetGoalScorer()
+	{
+		if (ActorTouches.Count == 0)
+			return "OG";
+
+		return ActorTouches [ActorTouches.Count - 1].GetName ();
+	}
 }

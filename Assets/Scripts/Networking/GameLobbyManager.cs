@@ -24,8 +24,13 @@ public class GameLobbyManager : NetworkLobbyManager
 
     public Dictionary<int, LobbyPlayer> LobbyPlayers = new Dictionary<int, LobbyPlayer>();
 
+	public TeamSettings HomeSettings;
+	public TeamSettings AwaySettings;
+
     void Start()
-    {
+    {		
+		connectionConfig.MaxSentMessageQueueSize = 256;
+
         if (instance != null)
             DestroyImmediate(instance.gameObject);
         
@@ -128,6 +133,9 @@ public class GameLobbyManager : NetworkLobbyManager
 
 		if(ready)
 		{
+			GameManager.instance.SetHomeKit (HomeSettings);
+			GameManager.instance.SetAwayKit (AwaySettings);
+
 			ServerChangeScene(playScene);
 		}
 	}
@@ -186,6 +194,12 @@ public class GameLobbyManager : NetworkLobbyManager
     }
 
     //Server Callbacks
+	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
+	{
+		base.OnServerAddPlayer (conn, playerControllerId);
+		Debug.Log ("OnServerAddPlayer");
+	}
+
     public override GameObject OnLobbyServerCreateLobbyPlayer(NetworkConnection conn, short playerControllerId)
     {
         GameObject obj = Instantiate(lobbyPlayerPrefab.gameObject) as GameObject;
@@ -198,9 +212,18 @@ public class GameLobbyManager : NetworkLobbyManager
 
     public override GameObject OnLobbyServerCreateGamePlayer(NetworkConnection conn, short playerControllerId)
     {
-        Debug.Log("Are we creating a player?");
+		GameObject player = (GameObject) Instantiate(gamePlayerPrefab, Vector3.zero, Quaternion.identity);
 
-        GameObject player = base.OnLobbyServerCreateGamePlayer(conn, playerControllerId) as GameObject;
+		int HairColor = LobbyPlayers [conn.connectionId].HairColor;
+
+		Debug.Log (LobbyPlayers [conn.connectionId].playerName + " " + conn.connectionId);
+
+		player.GetComponent<Player> ().SetAvatar (HairColor, 0, 0, 0);
+
+		NetworkServer.DestroyPlayersForConnection (conn);
+		NetworkServer.AddPlayerForConnection(conn, player, 0);
+
+		Debug.Log ("HairColor " + HairColor);
 
         return player; 
     }
@@ -217,4 +240,26 @@ public class GameLobbyManager : NetworkLobbyManager
         Debug.Log("Removing Player - Connection: " + conn.connectionId);
         LobbyPlayers.Remove(conn.connectionId);
     }
+
+	public void ChangeTeamSetting(string setting, string team)
+	{
+		if (team == "Home") 
+		{
+			if (setting == "Shirt")
+				HomeSettings.OnShirtPressed ();
+			else if (setting == "Sleeves")
+				HomeSettings.OnSleevesPressed ();
+			else if (setting == "Shorts")
+				HomeSettings.OnShortsPressed ();
+		} 
+		else if (team == "Away") 
+		{
+			if (setting == "Shirt")
+				AwaySettings.OnShirtPressed ();
+			else if (setting == "Sleeves")
+				AwaySettings.OnSleevesPressed ();
+			else if (setting == "Shorts")
+				AwaySettings.OnShortsPressed ();
+		}
+	}
 }

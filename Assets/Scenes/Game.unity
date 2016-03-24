@@ -640,6 +640,18 @@ Prefab:
       propertyPath: m_Alpha
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 22458976, guid: 6c9182bb6d089014db1a3fadab501ce0, type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 11442340, guid: 6c9182bb6d089014db1a3fadab501ce0, type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11442340, guid: 6c9182bb6d089014db1a3fadab501ce0, type: 2}
+      propertyPath: m_FontData.m_Alignment
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11473370, guid: 6c9182bb6d089014db1a3fadab501ce0, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 6c9182bb6d089014db1a3fadab501ce0, type: 2}

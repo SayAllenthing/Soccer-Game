@@ -3,7 +3,8 @@ using System.Collections;
 
 using System.Collections.Generic;
 
-public class Team{
+public class Team
+{
 
     public string name = "Home";
 
@@ -15,6 +16,11 @@ public class Team{
     List<string> Presets = new List<string>{"Home","Away"};
 
     List<Actor> Roster = new List<Actor>();
+
+	public Team(string s)
+	{
+		name = s;
+	}
 
 	// Use this for initialization
 	void Start () 
@@ -33,23 +39,41 @@ public class Team{
 
     }
 
-    public void SetKit(string s)
+    public void SetKitDefault(string s)
     {
         if (s == "Home")
         {
-            SetValues(Color.red, Color.white, new Color(0.8f, 0.7f, 0.05f), Color.white);
+            SetValues(Color.red, Color.white, Color.white);
         }
         else if (s == "Away")
         {
-            SetValues(Color.blue, Color.blue, Color.grey, Color.black);
+            SetValues(Color.blue, Color.blue, Color.black);
         }
+
+		SetKeeperKit (s);
     }
 
-    public void SetValues(Color Jersey, Color Sleeve, Color Keeper, Color Shorts)
+	public void SetKeeperKit(string s)
+	{
+		if (s == "Home") 
+		{
+			KeeperColor = new Color (0.8f, 0.7f, 0.05f);
+		} 
+		else 
+		{
+			KeeperColor = Color.grey;
+		}
+	}
+
+	public void SetKitColors(Color shirt, Color sleeves, Color shorts)
+	{		
+		SetValues(shirt, sleeves, shorts);
+	}
+
+    public void SetValues(Color Jersey, Color Sleeve, Color Shorts)
     {
         JerseyColour = Jersey;
         SleeveColour = Sleeve;
-        KeeperColor = Keeper;
         ShortsColor = Shorts;
     }
 

@@ -22,6 +22,10 @@ public class LobbyPlayer : NetworkLobbyPlayer
 
     public Image BGColor;
 
+	public static LobbyPlayer MyPlayer = null;
+
+	public int HairColor = -1;
+
 	void Awake()
 	{
 		DontDestroyOnLoad(transform.gameObject);
@@ -74,6 +78,9 @@ public class LobbyPlayer : NetworkLobbyPlayer
         Debug.Log("OnStartLocalPlayer");
 
         SetupLocalPlayer();
+		SendAvatarInfo ();
+
+		MyPlayer = this;
     }
 
     void SetupLocalPlayer()
@@ -88,9 +95,7 @@ public class LobbyPlayer : NetworkLobbyPlayer
         ChangeTeamButton.onClick.RemoveAllListeners();
         ChangeTeamButton.onClick.AddListener(OnTeamChanged);
 
-		Debug.Log("Am I ready? " + readyToBegin);
 		SendNotReadyToBeginMessage();
-		Debug.Log("Am I ready? " + readyToBegin);
     }
 
 	public override void OnClientReady(bool readyState)
@@ -178,4 +183,27 @@ public class LobbyPlayer : NetworkLobbyPlayer
     {
         MyTeam = team;
     }
+
+	public void AskToChangeTeamSettings(string s, string t)
+	{
+		Debug.Log ("Asking to change " + s);
+		CmdChangeTeamSetting (s, t);
+	}
+
+	[Command]
+	public void CmdChangeTeamSetting(string s, string t)
+	{		
+		GameLobbyManager.instance.ChangeTeamSetting (s, t);
+	}
+
+	void SendAvatarInfo()
+	{
+		CmdSetAvatar (PlayerOptions.CurrentPlayerOptions.HairColor);
+	}
+
+	[Command]
+	void CmdSetAvatar(int hc)
+	{
+		HairColor = hc;
+	}
 }

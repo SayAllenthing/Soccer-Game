@@ -9,7 +9,7 @@ public class Player : Actor
 	void Start () 
 	{		
         PlayerOptions PO = PlayerOptions.CurrentPlayerOptions;
-        SetAvatar(PO.HairColor, PO.HairStyle, PO.BrowStyle, PO.SkinColor);
+        //SetAvatar(PO.HairColor, PO.HairStyle, PO.BrowStyle, PO.SkinColor);
 	}
 
     public void Init()

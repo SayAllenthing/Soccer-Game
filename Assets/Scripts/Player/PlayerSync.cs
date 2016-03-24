@@ -9,7 +9,6 @@ public class PlayerSync : ActorSync
     GameObject ball;
 
     public string LobbyTeam = "Home";
-
    
     bool PingLock = false;
     float TimeStamp = 0;
@@ -27,14 +26,13 @@ public class PlayerSync : ActorSync
         }
     }
 
-
     public override void OnStartLocalPlayer()
     {
         anim.SetParameterAutoSend(0, true);
         anim.SetParameterAutoSend(1, true);
 
         EnableLocalPlayer();
-        GetAvatarValues();
+        //GetAvatarValues();
     }   
 
     void EnableLocalPlayer()
@@ -168,6 +166,15 @@ public class PlayerSync : ActorSync
            TimeStamp += Time.deltaTime;
         }
     }
+
+	//public getters
+	public override string GetName()
+	{
+		Debug.Log ("Lobby Player ? " + lobbyPlayer);
+		Debug.Log ("Name: " + lobbyPlayer.playerName);
+
+		return lobbyPlayer.playerName;
+	}
 
 	//Debug===========================================
 	public void OnDebugShot()

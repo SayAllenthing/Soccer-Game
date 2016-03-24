@@ -44,6 +44,8 @@ public class GameManager : NetworkBehaviour {
 
         state = GameState.NONE;
         DontDestroyOnLoad(gameObject);
+
+		CreateTeams();
     }
 
     void OnLevelWasLoaded(int level)
@@ -184,7 +186,7 @@ public class GameManager : NetworkBehaviour {
 			Destroy(ball);
 
         SpawnBall();
-        UI.RpcShowGoal(false);
+        UI.RpcShowGoal(false, "");
 
         for (int i = 0; i < actors.Count; i++)
         {
@@ -204,7 +206,7 @@ public class GameManager : NetworkBehaviour {
 
         game.OnGoal(net);
 
-        UI.RpcShowGoal(true);
+		UI.RpcShowGoal(true, ball.GetComponent<Ball>().GetGoalScorer());
 
         SetScore();
 
@@ -219,10 +221,22 @@ public class GameManager : NetworkBehaviour {
 
     void CreateTeams()
     {
-        Home = new Team();
-        Home.SetKit("Home");
+		Debug.Log ("Teams Are created");
+
+        Home = new Team("Home");
+        	Home.SetKitDefault("Home");
         
-        Away = new Team();
-        Away.SetKit("Away");
+        Away = new Team("Home");
+        	Away.SetKitDefault("Away");
     }
+
+	public void SetHomeKit(TeamSettings t)
+	{
+		Home.SetKitColors (t.GetShirtColor(), t.GetSleevesColor(), t.GetShortsColor ());
+	}
+
+	public void SetAwayKit(TeamSettings t)
+	{
+		Away.SetKitColors (t.GetShirtColor(), t.GetSleevesColor(), t.GetShortsColor ());
+	}
 }

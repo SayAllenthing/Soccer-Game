@@ -70,6 +70,7 @@
      <Compile Include="Assets\Scripts\Player\PlayerCamera.cs" />
      <Compile Include="Assets\Scripts\Player\PlayerSync.cs" />
      <Compile Include="Assets\Scripts\Player\Team.cs" />
+     <Compile Include="Assets\Scripts\TeamSettings.cs" />
      <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonBasic.shader" />
      <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonBasicOutline.shader" />
      <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonLitOutline.shader" />

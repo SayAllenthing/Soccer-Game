@@ -62,6 +62,8 @@ public class Actor : MonoBehaviour
         avatar.ChangeBrow(brow);
         avatar.ChangeHair(hair);
         avatar.ChangeSkin(skin);
+
+		Debug.Log ("What the fuck am I setting hair to? " + colour);
     }
 
     public string GetCurrentAnimationName()

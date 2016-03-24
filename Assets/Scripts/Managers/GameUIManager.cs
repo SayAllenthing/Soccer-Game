@@ -30,9 +30,12 @@ public class GameUIManager :  NetworkBehaviour
     }
 
     [ClientRpc]
-    public void RpcShowGoal(bool show)
+	public void RpcShowGoal(bool show, string scorer)
     {
-        if(Goal)
-            Goal.gameObject.SetActive(show);
+		if (Goal) 
+		{
+			Goal.text = "Goal!\n" + scorer;
+			Goal.gameObject.SetActive (show);
+		}
     }
 }

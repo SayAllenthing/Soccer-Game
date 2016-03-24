@@ -53,7 +53,7 @@ public class ActorSync : NetworkBehaviour {
     {
         player = GetComponent<Actor>();
         
-        anim.SetParameterAutoSend(0, true);
+		anim.SetParameterAutoSend(0, true);
         anim.SetParameterAutoSend(1, true);
     }
 
@@ -92,8 +92,8 @@ public class ActorSync : NetworkBehaviour {
 
         LerpPosition();
 
-        if (tag != "Keeper")
-            SetAvatar();
+        //if (tag != "Keeper")
+            //SetAvatar();
 	}
 
     protected void ServerUpdate()
@@ -216,6 +216,8 @@ public class ActorSync : NetworkBehaviour {
             }
             
             Ball theBall = col.gameObject.GetComponent<Ball>();
+
+			theBall.AddTouch (this);
             
             if(player.GetCurrentAnimationName() == "Sliding")
             {
@@ -258,7 +260,7 @@ public class ActorSync : NetworkBehaviour {
             KickLock = Time.time + 0.5f;
             //Do shoot/dribble code here
             //I can now pass it off to the ball itself
-        }
+        }	
     }
 
     [Server]
@@ -385,6 +387,7 @@ public class ActorSync : NetworkBehaviour {
         return true;
     }
 
+	//I don't rememeber what these do
     public void AddToTeam(Team t)
     {
         RpcAddToTeam(t.SleeveColour, t.JerseyColour, t.KeeperColor, t.ShortsColor);
@@ -393,7 +396,7 @@ public class ActorSync : NetworkBehaviour {
     [ClientRpc]
     void RpcAddToTeam(Color s, Color j, Color k, Color sh)
     {
-        Team t = new Team();
+        Team t = new Team("Home");
         t.SleeveColour = s;
         t.JerseyColour = j;
         t.KeeperColor = k;
@@ -401,4 +404,10 @@ public class ActorSync : NetworkBehaviour {
 
         player.SetKit(t);
     }
+
+	//public getters
+	public virtual string GetName()
+	{
+		return "AI";
+	}
 }
